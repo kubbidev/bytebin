@@ -35,6 +35,7 @@ import io.jooby.exception.StatusCodeException;
 import io.prometheus.client.Summary;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Objects;
 import me.lucko.bytebin.content.Content;
 import me.lucko.bytebin.content.ContentLoader;
 import me.lucko.bytebin.content.ContentStorageHandler;
@@ -232,7 +233,10 @@ public final class PostHandler implements Route.Handler {
             int len;
             byte[] buffer = new byte[65536];
             while ((len = stream.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
+                Objects.checkFromIndexSize(0, len, buffer.length);
+                LOGGER.info("Reading {} bytes", len);
+//                out.write(buffer, 0, len);
+
             }
             return out.toByteArray();
         } catch (IOException x) {
