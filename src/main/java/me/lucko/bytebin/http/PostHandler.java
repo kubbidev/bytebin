@@ -231,9 +231,10 @@ public final class PostHandler implements Route.Handler {
         try (InputStream stream = ctx.body().stream()) {
             ByteArrayOutputStream out = new ByteArrayOutputStream(declaredSize);
             int len;
-            byte[] buffer = new byte[65536];
+            byte[] buffer = new byte[16384];
             long totalLength = 0;
 
+            LOGGER.info("Start reading body of {} bytes", declaredSize);
             while ((len = stream.read(buffer)) != -1) {
                 Objects.checkFromIndexSize(0, len, buffer.length);
                 totalLength += len;
