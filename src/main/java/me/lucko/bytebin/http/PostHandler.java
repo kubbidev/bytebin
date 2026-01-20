@@ -232,12 +232,17 @@ public final class PostHandler implements Route.Handler {
             ByteArrayOutputStream out = new ByteArrayOutputStream(declaredSize);
             int len;
             byte[] buffer = new byte[65536];
+            long totalLength = 0;
+
             while ((len = stream.read(buffer)) != -1) {
                 Objects.checkFromIndexSize(0, len, buffer.length);
-                LOGGER.info("Reading {} bytes", len);
+                totalLength += len;
+                LOGGER.info("Read {} bytes of {}", totalLength, declaredSize);
 //                out.write(buffer, 0, len);
 
             }
+
+            LOGGER.info("Finish reading {} bytes of {}", totalLength, declaredSize);
             return out.toByteArray();
         } catch (IOException x) {
             throw SneakyThrows.propagate(x);
