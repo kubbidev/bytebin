@@ -77,7 +77,7 @@ public final class UpdateHandler implements Route.Handler {
     public CompletableFuture<Void> apply(@Nonnull Context ctx) {
         // get the requested path
         String path = ctx.path("id").value();
-        if (path.trim().isEmpty() || TokenGenerator.INVALID_TOKEN_PATTERN.matcher(path).find()) {
+        if (path.trim().isEmpty() || !TokenGenerator.VALID_TOKEN_PATTERN.matcher(path).find()) {
             BytebinServer.recordRejectedRequest("PUT", "invalid_path", ctx);
             throw new StatusCodeException(StatusCode.NOT_FOUND, "Invalid path");
         }

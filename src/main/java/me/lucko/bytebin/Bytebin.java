@@ -53,7 +53,6 @@ import me.lucko.bytebin.util.ExpiryHandler;
 import me.lucko.bytebin.util.ExponentialRateLimiter;
 import me.lucko.bytebin.util.RateLimitHandler;
 import me.lucko.bytebin.util.SimpleRateLimiter;
-import me.lucko.bytebin.util.TokenGenerator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -208,7 +207,6 @@ public final class Bytebin implements AutoCloseable {
                         config.getDouble(Option.READ_NOTFOUND_RATE_LIMIT_PERIOD_MULTIPLIER, 2.0),
                         config.getInt(Option.READ_NOTFOUND_RATE_LIMIT_PERIOD_MAX, 1440) // 24 hours
                 ),
-                new TokenGenerator(config.getInt(Option.KEY_LENGTH, 7)),
                 maxContentLength,
                 expiryHandler,
                 config.getStringMap(Option.HTTP_HOST_ALIASES),

@@ -160,7 +160,6 @@ public class Configuration {
         LOGGING_HTTP_URI("loggingHttpUri", "bytebin.logging.http.uri"),
         LOGGING_HTTP_FLUSH_PERIOD("loggingHttpFlushPeriodSeconds", "bytebin.logging.http.flush.period"), // seconds
 
-        KEY_LENGTH("keyLength", "bytebin.misc.keylength"),
         EXECUTOR_POOL_SIZE("corePoolSize", "bytebin.misc.corepoolsize"),
         IO_THREADS("ioThreads", "bytebin.misc.iothreads"),
 

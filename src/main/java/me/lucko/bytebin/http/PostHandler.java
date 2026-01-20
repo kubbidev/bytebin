@@ -28,7 +28,6 @@ package me.lucko.bytebin.http;
 import io.jooby.Context;
 import io.jooby.MediaType;
 import io.jooby.Route;
-import io.jooby.ServerOptions;
 import io.jooby.SneakyThrows;
 import io.jooby.StatusCode;
 import io.jooby.exception.StatusCodeException;
@@ -50,7 +49,6 @@ import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -74,21 +72,17 @@ public final class PostHandler implements Route.Handler {
 
     private final ContentStorageHandler storageHandler;
     private final ContentLoader contentLoader;
-    private final TokenGenerator contentTokenGenerator;
-    private final TokenGenerator authKeyTokenGenerator;
     private final long maxContentLength;
     private final ExpiryHandler expiryHandler;
     private final Map<String, String> hostAliases;
 
-    public PostHandler(BytebinServer server, LogHandler logHandler, RateLimiter rateLimiter, RateLimitHandler rateLimitHandler, ContentStorageHandler storageHandler, ContentLoader contentLoader, TokenGenerator contentTokenGenerator, long maxContentLength, ExpiryHandler expiryHandler, Map<String, String> hostAliases) {
+    public PostHandler(BytebinServer server, LogHandler logHandler, RateLimiter rateLimiter, RateLimitHandler rateLimitHandler, ContentStorageHandler storageHandler, ContentLoader contentLoader, long maxContentLength, ExpiryHandler expiryHandler, Map<String, String> hostAliases) {
         this.server = server;
         this.logHandler = logHandler;
         this.rateLimiter = rateLimiter;
         this.rateLimitHandler = rateLimitHandler;
         this.storageHandler = storageHandler;
         this.contentLoader = contentLoader;
-        this.contentTokenGenerator = contentTokenGenerator;
-        this.authKeyTokenGenerator = new TokenGenerator(32);
         this.maxContentLength = maxContentLength;
         this.expiryHandler = expiryHandler;
         this.hostAliases = hostAliases;
@@ -112,7 +106,7 @@ public final class PostHandler implements Route.Handler {
         String contentType = ctx.header("Content-Type").value("text/plain");
 
         // generate a key
-        String key = this.contentTokenGenerator.generate();
+        String key = TokenGenerator.generate();
 
         // get the content encodings
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
@@ -136,7 +130,7 @@ public final class PostHandler implements Route.Handler {
         boolean allowModifications = ctx.header("Allow-Modification").booleanValue(false);
         String authKey;
         if (allowModifications) {
-            authKey = this.authKeyTokenGenerator.generate();
+            authKey = TokenGenerator.generate();
         } else {
             authKey = null;
         }
